@@ -2,24 +2,32 @@
 const Sauce = require("../models/sauce");
 // Importation du package "fs" de Node
 const fs = require("fs");
+const sauce = require("../models/sauce");
 
 //Création d'une sauce
 
 exports.createSauce = (req, res, next) => {
+  // Modification du format de la requête pour la transformer en objet
   const sauceObject = JSON.parse(req.body.sauce);
   //Suppression du faux id qui est envoyé par le frontend
   delete sauceObject._id;
   const sauce = new Sauce({
     //Spread qu'on utilise pour faciliter la copie de tous les éléments de sauceObject
     ...sauceObject,
-    imageUrl: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
+    //Récupération de l'url dynamique crée par multer
+    imageUrl: `${req.protocol}://${req.get("host")}/images/${
+      req.file.filename
+    }`,
   });
   sauce
     //Sauvegarde de la sauce dans la base de données
     .save()
+    // Promesse
     .then(() => {
+      //Réponse de succès avec code 200
       req.status(201).json({ message: "Sauce enregistrée!" });
     })
+    //Réponse d'erreur avec code 400
     .catch((error) => {
       res.status(400).json({ error });
     });
@@ -115,12 +123,11 @@ exports.getAllSauces = (req, res, next) => {
 
 // Like/Dislike d'une sauce
 exports.rateSauce = (req, res, next) => {
-  const userId = req.body.userId;
-  Sauce.findOne({ _id: req.params.id }).then((sauce) => {
-    if (!sauce.userId.includes(userId)) {
-      Sauce.updateOne({
-        _id: sauceId,
-      });
-    }
-  });
+  Sauce.findOne({ _id: req.params.id });
+  //Si la personne aime la sauce
+  if (req.body.like == 1) {
+    sauce.like++;
+    sauce.userLiked.push(req.body.userId);
+    sauce.save();
+  }
 };
