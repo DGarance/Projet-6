@@ -18,7 +18,7 @@ exports.signup = (req, res, next) => {
         //sauvergarde des données
         .save()
         //Réponse succès code 200
-        .then(() => res.status(201).json({ message: "Utilisateur crée!" }))
+        .then(() => res.status(201).json({ message: "Utilisateur créée!" }))
         //Réponse erreur code 400
         .catch((error) => res.status(400).json({ error }));
     })
