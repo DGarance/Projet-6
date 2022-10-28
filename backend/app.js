@@ -1,5 +1,7 @@
 // Importation du package Express
 const express = require("express");
+//Importation du package BodyParser
+const bodyParser = require("body-parser");
 //Appel de la méthode Express
 const app = express();
 //Importation du package Mongoose
@@ -7,6 +9,8 @@ const mongoose = require("mongoose");
 
 const path = require("path");
 
+
+//Connexion à la base de données MongoDB avec id et password
 mongoose
   .connect(
     "mongodb+srv://Akane972:Tyty972130@cluster0.5sczs0n.mongodb.net/?retryWrites=true&w=majority",
@@ -29,12 +33,14 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(express.json());
+app.use(bodyParser.json());
 
 const userRoutes = require("./routes/user");
-const sauceRoutes = require("./routes/sauce");
+const sauceRoutes = require("./routes/sauces");
 
+app.use("/images", express.static(path.join(__dirname, "images")));
 app.use("/api/auth", userRoutes);
 app.use("/api/sauces", sauceRoutes);
+
 
 module.exports = app;

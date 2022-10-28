@@ -1,8 +1,7 @@
 //Appel du fichier sauce dans le dossier models
-const Sauce = require("../models/sauce");
+const Sauce = require("../models/Sauce");
 // Importation du package "fs" de Node
 const fs = require("fs");
-const sauce = require("../models/sauce");
 
 //Création d'une sauce
 
@@ -11,16 +10,16 @@ exports.createSauce = (req, res, next) => {
   const sauceObject = JSON.parse(req.body.sauce);
   //Suppression du faux id qui est envoyé par le frontend
   delete sauceObject._id;
-  delete sauceObject.userId;
   const sauce = new Sauce({
     //Spread qu'on utilise pour faciliter la copie de tous les éléments de sauceObject
     ...sauceObject,
-    userId: req.auth.userId,
     //Récupération de l'url dynamique crée par multer
-    imageUrl: `${req.protocol}://${req.get("host")}/image/${req.file.filename}`,
+    imageUrl: `${req.protocol}://${req.get("host")}/images/${
+      req.file.filename
+    }`,
   });
-  //Sauvegarde de la sauce dans la base de données
   sauce
+    //Sauvegarde de la sauce dans la base de données
     .save()
     // Promesse
     .then(() => {
@@ -59,7 +58,7 @@ exports.modifySauce = (req, res, next) => {
     ? {
         //Récupération des infos des objets
         ...JSON.parse(req.body.sauce),
-        imageUrl: `${req.protocol}://${req.get("host")}/image/${
+        imageUrl: `${req.protocol}://${req.get("host")}/images/${
           req.file.filename
         }`,
       }
@@ -96,8 +95,8 @@ exports.deleteSauce = (req, res, next) => {
       if (sauce.userId != req.auth.userId) {
         res.status(401).json({ message: "Action non autorisée!" });
       } else {
-        const filename = sauce.imageUrl.split("/image/")[1];
-        fs.unlink(`image/${filename}`, () => {
+        const filename = sauce.imageUrl.split("/images/")[1];
+        fs.unlink(`images/${filename}`, () => {
           Sauce.deleteOne({ _id: req.params.id })
             .then(() => {
               res.status(200).json({ message: "Sauce supprimé!" });

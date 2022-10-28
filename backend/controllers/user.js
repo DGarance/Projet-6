@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 //Importation du package jsonwebtoken pour générer les tokens
 const jwt = require("jsonwebtoken");
 //Importation du fichier user.js du dossier models
-const User = require("../models/user");
+const User = require("../models/User");
 
 exports.signup = (req, res, next) => {
   //Hashage du mot de passe 10 fois
