@@ -6,9 +6,10 @@ const bodyParser = require("body-parser");
 const app = express();
 //Importation du package Mongoose
 const mongoose = require("mongoose");
+const mongodbErrorHandler = require("mongoose-mongodb-errors");
 
 const path = require("path");
-
+//Importation du package Dotenv
 const dotenv = require("dotenv");
 dotenv.config();
 //Connexion à la base de données MongoDB avec id et password
@@ -34,6 +35,7 @@ app.use((req, res, next) => {
   next();
 });
 
+mongoose.plugin(mongodbErrorHandler);
 app.use(bodyParser.json());
 
 const userRoutes = require("./routes/user");

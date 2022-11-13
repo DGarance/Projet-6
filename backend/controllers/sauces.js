@@ -4,7 +4,6 @@ const Sauce = require("../models/Sauce");
 const fs = require("fs");
 
 //Création d'une sauce
-
 exports.createSauce = (req, res, next) => {
   // Modification du format de la requête pour la transformer en objet
   const sauceObject = JSON.parse(req.body.sauce);
@@ -34,7 +33,6 @@ exports.createSauce = (req, res, next) => {
 };
 
 //Affichage d'une seule sauce
-
 exports.getOneSauce = (req, res, next) => {
   // On recherche la sauce dans la base de données avec son id
   Sauce.findOne({
@@ -52,7 +50,6 @@ exports.getOneSauce = (req, res, next) => {
 };
 
 //Modification d'une sauce
-
 exports.modifySauce = (req, res, next) => {
   // Création d'un objet en demande permettant de modifier une image
   const sauceObject = req.file
@@ -70,7 +67,7 @@ exports.modifySauce = (req, res, next) => {
   Sauce.findOne({ _id: req.params.id })
     .then((sauce) => {
       if (sauce.userId != req.auth.userId) {
-        res.status(401).json({ message: "Action non autorisée" });
+        res.status(403).json({ message: "Action non autorisée" });
       } else {
         Sauce.updateOne(
           {
@@ -94,7 +91,7 @@ exports.deleteSauce = (req, res, next) => {
   Sauce.findOne({ _id: req.params.id })
     .then((sauce) => {
       if (sauce.userId != req.auth.userId) {
-        res.status(401).json({ message: "Action non autorisée!" });
+        res.status(403).json({ message: "Action non autorisée!" });
       } else {
         const filename = sauce.imageUrl.split("/images/")[1];
         fs.unlink(`images/${filename}`, () => {
@@ -111,8 +108,8 @@ exports.deleteSauce = (req, res, next) => {
       res.status(500).json({ error });
     });
 };
-//Affichage de toutes les sauces
 
+//Affichage de toutes les sauces
 exports.getAllSauces = (req, res, next) => {
   // On recherche toutes les sauces dans la base de données
   Sauce.find()

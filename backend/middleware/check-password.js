@@ -23,12 +23,15 @@ passwordSchema
 
 // Vérification du mot de passe
 module.exports = (req, res, next) => {
+  // Si le mot de passe n'est pas valide
   if (!passwordSchema.validate(req.body.password)) {
+// Alors on renvoie un message d'erreur indiquant à l'utilisateur ce qu'il manque pour corriger
     res.statusMessage = `Le mot de passe ${passwordSchema.validate(
       req.body.password,
       { list: true }
     )} n'est pas assez fort`;
     return res.status(400).send();
   }
+  // Sinon on passe à l'étape suivante
   next();
 };

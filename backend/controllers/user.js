@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 //Importation du fichier user.js du dossier models
 const User = require("../models/User");
 
+//Inscription de l'utilisateur
 exports.signup = (req, res, next) => {
   //Hashage du mot de passe 10 fois
   bcrypt
@@ -28,6 +29,7 @@ exports.signup = (req, res, next) => {
     .catch((error) => res.status(500).json({ error }));
 };
 
+//Connexion de l'utilisateur 
 exports.login = (req, res, next) => {
   //Méthode "findOne" pour trouver un seul utilisateur
   User.findOne({

@@ -1,8 +1,8 @@
-//Importation du package jsonwebtoken pour génrer les tokens
+//Importation du package jsonwebtoken pour générer les tokens
 const jwt = require("jsonwebtoken");
 
+//Vérification des données
 module.exports = (req, res, next) => {
-  //Vérification des données
   try {
     const token = req.headers.authorization.split(" ")[1];
     //Décodage du token et vérification

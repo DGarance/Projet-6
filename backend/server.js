@@ -17,7 +17,7 @@ const normalizePort = (val) => {
   return false;
 };
 
-// Définition du port 300
+// Définition du port 3000
 const port = normalizePort(process.env.PORT || "3000");
 
 // Définition du port pour app.js
